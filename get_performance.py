@@ -104,6 +104,33 @@ def get_performance_detail():
         print("\nEstadísticas totales:")
         for stat, value in total_stats.items():
             print(f"{stat}: {value}")
+
+        #Gráfico de valor de mercado
+        print("\nMostrando la evolución del valor de mercado del jugador en los últimos 5 años")
+
+        #Ultimos 5 años del valor de mercado del jugador
+        market_values = []
+        for year in range(int(season_id) - 5, int(season_id) + 1):
+            market_value = get_player_market_value(player_id, f"{year}/{year + 1}")
+            market_values.append((year, market_value))
+        market_values.sort(key=lambda x: x[0])  
+
+        # Graficar el valor de mercado en los últimos 5 años
+        years = [entry[0] for entry in market_values]
+        values = [entry[1] for entry in market_values]
+        plt.figure(figsize=(10, 6))
+        plt.plot(years, values, marker='o', color='blue', linestyle='-', linewidth=2, markersize=8)
+        
+        # Titulo y etiquetas
+        plt.title(f"Evolución del Valor de Mercado de {player_name} en los Últimos 5 Años", fontsize=14)
+        plt.xlabel("Año", fontsize=12)
+        plt.ylabel("Valor de Mercado (en millones de euros)", fontsize=12)
+        plt.grid(True)
+        plt.xticks(years, rotation=45)
+
+        plt.gca().invert_yaxis() 
+        plt.tight_layout()
+        plt.show()
     else:
         print("No se encontraron datos de rendimiento para este jugador")
     
